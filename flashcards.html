@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Flashcards</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="flashcards.js" defer></script>
+</head>
+<body>
+    <h1>Flashcards</h1>
+    <div id="flashcards-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("Flashcards page loaded!");
+
+            chrome.storage.sync.get("flashcards", (data) => {
+                const flashcards = data.flashcards || [];
+                console.log("Loaded flashcards:", flashcards);
+
+                const container = document.getElementById("flashcards-container");
+
+                if (flashcards.length === 0) {
+                    container.innerHTML = "<p>No flashcards available.</p>";
+                    return;
+                }
+
+                flashcards.forEach((text, index) => {
+                    const card = document.createElement("div");
+                    card.className = "flashcard";
+                    card.innerHTML = `<strong>Flashcard ${index + 1}:</strong><p>${text.replace(/\n/g, "<br>")}</p>`;
+                    container.appendChild(card);
+                });
+
+                console.log("Flashcards rendered successfully!");
+            });
+        });
+    </script>
+</body>
+</html>

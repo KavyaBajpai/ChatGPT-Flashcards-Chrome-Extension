@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+#flashcards-container {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flashcard {
+    background: white;
+    color: black;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+.flashcard-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.flashcard-btn.delete {
+    background: #dc3545;
+}
+
+.flashcard-btn.copy {
+    background: #28a745;
+}
+
+.flashcard-btn.edit {
+    background: #ffc107;
+}
+
+.flashcard-btn.star {
+    background: #ffcc00;
+    color: black;
+}
+
+.flashcard.important {
+    border: 2px solid #ffcc00;
+    background: #fff3cd;
+}
