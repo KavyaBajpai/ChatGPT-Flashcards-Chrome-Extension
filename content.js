@@ -1,23 +1,29 @@
-function extractAnswers() {
-    const answerNodes = document.querySelectorAll('.markdown.prose.w-full.break-words');
+function extractFlashcards() {
+    const messages = document.querySelectorAll('[data-testid="conversation-turn"]');
 
-    const extractedText = Array.from(answerNodes).map(node =>
-        Array.from(node.children)
-            .filter(child => !child.classList.contains("overflow-hidden"))
-            .map(child => child.innerText.trim())
-            .filter(text => text.length > 0)
-            .join("\n")
-    );
+    let flashcards = [];
+    let lastQuestion = null;
 
-    return extractedText;
-}
+    messages.forEach((message) => {
+        const userMessage = message.querySelector('.whitespace-pre-wrap'); // User's question
+        const gptMessage = message.querySelector('.markdown.prose.w-full.break-words'); // ChatGPT's answer
 
-function openFlashcardsTab() {
-    chrome.runtime.sendMessage({ action: "openFlashcards" });
+        if (userMessage) {
+            lastQuestion = userMessage.innerText.trim();
+        }
+
+        if (gptMessage && lastQuestion) {
+            const answer = gptMessage.innerText.trim();
+            flashcards.push({ question: lastQuestion, answer });
+            lastQuestion = null; // Reset after pairing
+        }
+    });
+
+    return flashcards;
 }
 
 function saveAndOpenFlashcards() {
-    const flashcards = extractAnswers();
+    const flashcards = extractFlashcards();
     console.log("Extracted flashcards:", flashcards);
 
     if (flashcards.length === 0) {
@@ -25,12 +31,12 @@ function saveAndOpenFlashcards() {
         return;
     }
 
-    // Store flashcards in chrome.storage.sync and then open the flashcards page
     chrome.runtime.sendMessage({ action: "saveFlashcards", flashcards }, () => {
         console.log("Flashcards saved, opening new tab...");
-        openFlashcardsTab();
+        chrome.runtime.sendMessage({ action: "openFlashcards" });
     });
 }
+
 
 // Create and insert floating button
 function addFlashcardButton() {
