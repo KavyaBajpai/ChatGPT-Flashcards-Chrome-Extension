@@ -1,26 +1,22 @@
 function extractFlashcards() {
-    const messages = document.querySelectorAll('[data-testid="conversation-turn"]');
+    const userMessages = document.querySelectorAll('.whitespace-pre-wrap'); // User's questions
+    const gptMessages = document.querySelectorAll('.markdown.prose.w-full.break-words'); // ChatGPT's answers
 
     let flashcards = [];
-    let lastQuestion = null;
-
-    messages.forEach((message) => {
-        const userMessage = message.querySelector('.whitespace-pre-wrap'); // User's question
-        const gptMessage = message.querySelector('.markdown.prose.w-full.break-words'); // ChatGPT's answer
-
-        if (userMessage) {
-            lastQuestion = userMessage.innerText.trim();
-        }
-
-        if (gptMessage && lastQuestion) {
-            const answer = gptMessage.innerText.trim();
-            flashcards.push({ question: lastQuestion, answer });
-            lastQuestion = null; // Reset after pairing
+    
+    userMessages.forEach((userMessage, index) => {
+        const question = userMessage.innerText.trim();
+        const answer = gptMessages[index] ? gptMessages[index].innerText.trim() : ""; // Match answer with question
+        
+        if (question && answer) {
+            flashcards.push({ question, answer });
         }
     });
 
+    console.log("Extracted flashcards:", flashcards);
     return flashcards;
 }
+
 
 function saveAndOpenFlashcards() {
     const flashcards = extractFlashcards();

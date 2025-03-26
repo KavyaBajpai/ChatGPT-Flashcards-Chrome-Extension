@@ -56,14 +56,53 @@ document.addEventListener("DOMContentLoaded", () => {
             container.appendChild(card);
         });
 
-        function openFlashcard(question, answer) {
-            const modal = document.getElementById("flashcard-modal");
-            const modalText = document.getElementById("modal-text");
+        // function openFlashcard({question, answer}) {
+        //     const modal = document.getElementById("flashcard-modal");
+        //     const modalText = document.getElementById("modal-text");
+        //     const closeBtn = document.querySelector(".flashcard-btn.close");
         
-            modalText.innerHTML = `<strong>${question}</strong><br><br>${answer.replace(/\n/g, "<br>")}`;
-            modal.style.display = "flex";
-            document.body.classList.add("blurred"); // Blur background
+        //     modalText.innerHTML = `<strong>${question}</strong><br><br>${answer.replace(/\n/g, "<br>")}`;
+        //     modal.style.display = "flex";
+        //     document.body.classList.add("blurred"); // Blur background
+
+        //     if (closeBtn) {
+        //         console.log("Attaching event listener to close button.");
+        //         closeBtn.addEventListener("click", closeFlashcard);
+        //     } else {
+        //         console.error("Close button not found!");
+        //     }
+        // }
+
+        function openFlashcard(question, answer) {
+            console.log("Opening flashcard with:", question, answer);
+        
+            setTimeout(() => {
+                const modal = document.getElementById("flashcard-modal");
+                const modalText = document.getElementById("modal-text");
+                const closeBtn = document.querySelector(".flashcard-btn.close");
+        
+                if (modal && modalText) {
+                    console.log("Modal detected, adding text...");
+                    modalText.innerHTML = `<strong>${question}</strong><br><br>${answer.replace(/\n/g, "<br>")}`;
+                    modal.style.display = "flex"; // Ensure modal is visible
+                    document.body.classList.add("blurred"); // Blur background
+                    if (closeBtn) {
+                        console.log("Attaching event listener to close button.");
+                        closeBtn.addEventListener("click", closeFlashcard);
+                    } else {
+                        console.error("Close button not found!");
+                    }
+                    
+                }
+                else
+                {
+                    console.error("Modal or modal-text not found!"); // Debugging log
+            return;
+                }
+            },200);
         }
+            
+        
         
         function closeFlashcard() {
             console.log("closeFlashcard() function executed!");
