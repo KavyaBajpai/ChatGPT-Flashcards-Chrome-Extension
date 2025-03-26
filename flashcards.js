@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        flashcards.forEach(({question, answer}, index) => {
+        flashcards.forEach(({ question, answer }, index) => {
             const card = document.createElement("div");
             card.className = "flashcard";
             const previewText = document.createElement("p");
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //     const modal = document.getElementById("flashcard-modal");
         //     const modalText = document.getElementById("modal-text");
         //     const closeBtn = document.querySelector(".flashcard-btn.close");
-        
+
         //     modalText.innerHTML = `<strong>${question}</strong><br><br>${answer.replace(/\n/g, "<br>")}`;
         //     modal.style.display = "flex";
         //     document.body.classList.add("blurred"); // Blur background
@@ -73,40 +73,73 @@ document.addEventListener("DOMContentLoaded", () => {
         //     }
         // }
 
+        // function openFlashcard(question, answer) {
+        //     console.log("Opening flashcard with:", question, answer);
+
+        //     setTimeout(() => {
+        //         const modal = document.getElementById("flashcard-modal");
+        //         const modalText = document.getElementById("modal-text");
+        //         
+
+        //         if (modal && modalText) {
+        //             console.log("Modal detected, adding text...");
+        //             modalText.innerHTML = `<strong>${question}</strong><br><br>${answer.replace(/\n/g, "<br>")}`;
+        //             modal.style.display = "flex"; // Ensure modal is visible
+        //             document.body.classList.add("blurred"); // Blur background
+        //             if (closeBtn) {
+        //                 console.log("Attaching event listener to close button.");
+        //                 closeBtn.addEventListener("click", closeFlashcard);
+        //             } else {
+        //                 console.error("Close button not found!");
+        //             }
+
+        //         }
+        //         else
+        //         {
+        //             console.error("Modal or modal-text not found!"); // Debugging log
+        //     return;
+        //         }
+        //     },200);
+        // }
+
         function openFlashcard(question, answer) {
             console.log("Opening flashcard with:", question, answer);
-        
+
             setTimeout(() => {
-                const modal = document.getElementById("flashcard-modal");
-                const modalText = document.getElementById("modal-text");
-                const closeBtn = document.querySelector(".flashcard-btn.close");
-        
-                if (modal && modalText) {
-                    console.log("Modal detected, adding text...");
-                    modalText.innerHTML = `<strong>${question}</strong><br><br>${answer.replace(/\n/g, "<br>")}`;
-                    modal.style.display = "flex"; // Ensure modal is visible
-                    document.body.classList.add("blurred"); // Blur background
+                (function (q, a) {  // ✅ Immediately Invoked Function to retain values
+                    const modal = document.getElementById("flashcard-modal");
+                    const modalText = document.getElementById("modal-text");
+                    const closeBtn = document.querySelector(".flashcard-btn.close");
                     if (closeBtn) {
                         console.log("Attaching event listener to close button.");
                         closeBtn.addEventListener("click", closeFlashcard);
                     } else {
                         console.error("Close button not found!");
                     }
-                    
-                }
-                else
-                {
-                    console.error("Modal or modal-text not found!"); // Debugging log
-            return;
-                }
-            },200);
+
+                    if (!modal || !modalText) {
+                        console.error("Modal or modal-text not found!");
+                        return;
+                    }
+
+                    if (!a) {
+                        console.error("Answer is undefined! Check flashcard extraction.");
+                        a = "No answer available.";
+                    }
+
+                    console.log("Modal found! Displaying flashcard...");
+                    modalText.innerHTML = `<strong>${q}</strong><br><br>${a.replace(/\n/g, "<br>")}`;
+                    modal.style.display = "flex"; // Ensure modal is visible
+                   // document.body.classList.add("blurred"); // Blur background
+                })(question, answer);  // ✅ Pass values explicitly
+            }, 200); // Delay to ensure modal exists
         }
-            
-        
-        
+
+
+
         function closeFlashcard() {
             console.log("closeFlashcard() function executed!");
-        
+
             const modal = document.getElementById("flashcard-modal");
             if (modal) {
                 modal.style.display = "none"; // ✅ Hide the modal
@@ -116,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Modal not found!");
             }
         }
-        
+
 
 
         // ✅ Function to Delete a Flashcard
